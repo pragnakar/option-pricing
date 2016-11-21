@@ -64,3 +64,4 @@ plot(aapl_opt$"2015_4_17_puts"$strike, aapl_opt$"2015_4_17_puts"$oi, type = "s",
 
 
 df = data.frame(aapl_opt)
+cat("hello")
