@@ -38,6 +38,10 @@ option_data = stock_info[[input]]
 View(option_data)
 names(option_data)
 
+
+company_details = getQuote(company_name)
+spot_price = company_details$Last # spot price 
+company_details$Change
 choice = readline(" enter whether you want to work on \ncalls or options for call press 1 for put press 2:\n ")
 if (choice == 1) {
     # call options 
@@ -50,7 +54,7 @@ price_option = data_option$Last # option price
 
 expiry_date = as.Date( list_of_contents[input], format = "%b.%d.%Y")
 
-year_to_expire = as.numeric(expiry_date - today) / 365
+year_to_expire = as.numeric(expiry_date - today) / 365 # time 
 days_to_expire = as.numeric(expiry_date - today)
 
 
