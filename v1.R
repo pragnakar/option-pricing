@@ -13,48 +13,22 @@ clear_screen <- function() {
 
 library(RCurl)
  library(jsonlite)
- library(plyr)
+library(plyr)
 
-fixJSON <- function(json) {
-    gsub('([^,{:]+):', '"\1":', json)
-    
-}
+library(quantmod)
 
-URL1 = 'http://www.google.com/finance/option_chain?q=%s&output=json'
-URL2 = 'http://www.google.com/finance/option_chain?q=%s&output=json&expy=%d&expm=%d&expd=%d'
+stock_info = getOptionChain(company_name, Exp = NULL, src = "yahoo", "2016/2017")
 
 
-getOptionQuotes <- function(symbol) {
-     url = sprintf(URL1, symbol)
-     #
-     chain = fromJSON(fixJSON(getURL(url)))
-     #
-     options = mlply(chain$expirations, function(y, m, d) {
-         url = sprintf(URL2, symbol, y, m, d)
-         expiry = fromJSON(fixJSON(getURL(url)))
-         #
-         expiry$calls$type = "Call"
-         expiry$puts$type = "Put"
-         #
-         prices = rbind(expiry$calls, expiry$puts)
-         #
-         prices$expiry = sprintf("%4d-%02d-%02d", y, m, d)
-         prices$underlying.price = expiry$underlying_price
-         #
-         prices
-        
-    })
-     #
-     options = cbind(data.frame(symbol), rbind.fill(options))
-     #
-     names(options) = c("price", "bid", "ask", "open.interest")
-     #
-     for (col in c("strike", "price", "bid", "ask"))
-        options[, col] = as.numeric(options[, col])
-    options[, "open.interest"] = suppressWarnings(as.integer(options[, "open.interest"]))
-     #
-     options[, c(1, 16, 15, 6, 10, 11, 17, 14, 12)]
-    
-}
+month_wise_data = stock_info$Apr.21.2017
+stock_info[[1]]
+names(stock_info)
+call_option_list = month_wise_data$calls
+put_option_list = month_wise_data$puts
 
-AAPL = getOptionQuotes("AAPL")
+
+View(call_option_list)
+View(put_option_list)
+
+company_details = getQuote(company_name)
+company_details$Last
