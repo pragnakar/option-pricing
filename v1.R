@@ -17,6 +17,8 @@ library(plyr)
 
 library(quantmod)
 
+company_name = readline(" enter company name :\n")
+
 stock_info = getOptionChain(company_name, Exp = NULL, src = "yahoo", "2016/2017")
 
 
