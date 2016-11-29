@@ -48,8 +48,10 @@ data_option = call_option_list
 strike = data_option$Strike # strike 
 price_option = data_option$Last # option price 
 
-expiry_date = as.Date( list_of_contents[input], format=' ') 
+expiry_date = as.Date( list_of_contents[input], format = "%b.%d.%Y")
 
+year_to_expire = as.numeric(expiry_date - today) / 365
+days_to_expire = as.numeric(expiry_date - today)
 
 
 } else {
