@@ -51,10 +51,12 @@ cat(" sigma :", sigma)
 # risk free rate 
 
 risk_free_rate = 0.03
+
 cat("risk free rate set as :", risk_free_rate)
 ######################################################
 # date 
- exp_date=list_of_contents[input]
+
+exp_date = list_of_contents[input]
 expiry_date = as.Date(list_of_contents[input], format = "%b.%d.%Y")
 
 year_to_expire = as.numeric(expiry_date - today) / 365 # time 
@@ -92,7 +94,15 @@ if (choice == 1) {
     cat(" price of call option on market ", price_option)
     ##################################################################################
     # monte carlo simulation 
-    num.sim <- 100000    R <- (r - 0.5 * sigma ^ 2) * T    SD <- sigma * sqrt(T)    TTM.price <- S0 * exp(R + SD * rnorm(num.sim, 0, 1))    # call option     TTM.call <- pmax(0, TTM.price - K)    PV.call <- TTM.call * (exp( - r * T))    cat(" estimated price of call option via monte carlo simulation  ", mean(PV.call))
+    num.sim <- 100000
+    R <- (r - 0.5 * sigma ^ 2) * T
+    SD <- sigma * sqrt(T)
+    TTM.price <- S0 * exp(R + SD * rnorm(num.sim, 0, 1))
+
+    # call option 
+    TTM.call <- pmax(0, TTM.price - K)
+    PV.call <- TTM.call * (exp( - r * T))
+    cat(" estimated price of call option via monte carlo simulation  ", mean(PV.call))
 
 
 
@@ -126,8 +136,13 @@ if (choice == 1) {
     cat("price of put option on market ", price_option)
     ##################################################################################
     # monte carlo simulation 
-    num.sim <- 100000    R <- (r - 0.5 * sigma ^ 2) * T    SD <- sigma * sqrt(T)    TTM.price <- S0 * exp(R + SD * rnorm(num.sim, 0, 1))
-    TTM.put <- pmax(0, K - TTM.price)    PV.put <- TTM.put * (exp( - r * T))    cat(" estimated price of put option via monte carlo simulation  ", mean(PV.put))
+    num.sim <- 100000
+    R <- (r - 0.5 * sigma ^ 2) * T
+    SD <- sigma * sqrt(T)
+    TTM.price <- S0 * exp(R + SD * rnorm(num.sim, 0, 1))
+    TTM.put <- pmax(0, K - TTM.price)
+    PV.put <- TTM.put * (exp( - r * T))
+    cat(" estimated price of put option via monte carlo simulation  ", mean(PV.put))
 
 }
 
@@ -137,9 +152,12 @@ if (choice == 1) {
 S0 = S0
 K = K
 T = T
-r = r
-num.sim <- 100000R <- (r - 0.5 * sigma ^ 2) * T
-SD <- sigma * sqrt(T)TTM.price <- S0 * exp(R + SD * rnorm(num.sim, 0, 1))
+r = r
+
+num.sim <- 100000
+R <- (r - 0.5 * sigma ^ 2) * T
+SD <- sigma * sqrt(T)
+TTM.price <- S0 * exp(R + SD * rnorm(num.sim, 0, 1))
 
 # call option 
 TTM.call <- pmax(0, TTM.price - K)
@@ -148,7 +166,9 @@ cat(" estimated price of call option via monte carlo simulation  ", mean(PV.call
 
 # put  option 
 
-TTM.put <- pmax(0, K - TTM.price)PV.put <- TTM.put * (exp( - r * T))cat(" estimated price of put option via monte carlo simulation  ", mean(PV.put))
+TTM.put <- pmax(0, K - TTM.price)
+PV.put <- TTM.put * (exp( - r * T))
+cat(" estimated price of put option via monte carlo simulation  ", mean(PV.put))
 
 
 
@@ -162,16 +182,32 @@ TTM.put <- pmax(0, K - TTM.price)PV.put <- TTM.put * (exp( - r * T))cat(" esti
 
 ##################################################################################
 ##### test block 
+######################################################
+# date 
+input = 2
+exp_date = list_of_contents[input]
+expiry_date = as.Date(list_of_contents[input], format = "%b.%d.%Y")
 
+year_to_expire = as.numeric(expiry_date - today) / 365 # time 
+days_to_expire = as.numeric(expiry_date - today)
+
+#cat(" time of option to mature : ", year_to_expire,"\n")
+
+cat(" exp date", exp_date, " \n")
+cat(" sigma :", sigma ,"\n")
+cat("risk free rate", risk_free_rate ,"\n")
+
+option_data = stock_info[[input]]
 ###########call option test block 
+cat(" call block \n\n")
 call_option_list = option_data$calls
-PRICE_OF_OPTION <- c()
+PRICE_IN_MARKET <- c()
 ESTIMATED_PRICE <- c()
 SIMULATED_PRICE <- c()
 STRIKE<- c()
 View(call_option_list)
 for (input in 1:nrow(call_option_list)) {
-    #input = as.numeric(readline("enter which option you want to work on : \n"))
+    #input = as.numeric(readline(" enter which option you want to work on : \n"))
     data_option = call_option_list[input,]
 
     strike = data_option$Strike # !!!! strike 
@@ -192,7 +228,7 @@ for (input in 1:nrow(call_option_list)) {
     #cat(" estimated price of call option : ", estimated_price, "\n")
     ESTIMATED_PRICE <- c(ESTIMATED_PRICE, round(estimated_price,4))
     #cat(" price of call option on market ", price_option, "\n")
-    PRICE_OF_OPTION <- c(PRICE_OF_OPTION, price_option)
+    PRICE_IN_MARKET <- c(PRICE_IN_MARKET, price_option)
     ##################################################################################
     # monte carlo simulation 
     num.sim <- 100000
@@ -209,13 +245,14 @@ for (input in 1:nrow(call_option_list)) {
 
 cat(" spot price :", spot_price, "\n")
 cat( " expire date", exp_date, "\n")
-call_final <- data.frame(STRIKE,PRICE_OF_OPTION, ESTIMATED_PRICE, SIMULATED_PRICE)
+call_final <- data.frame(STRIKE,PRICE_IN_MARKET, ESTIMATED_PRICE, SIMULATED_PRICE)
 
 View(call_final)
 
 ####################### put option test block 
+cat(" put block \n\n")
 put_option_list = option_data$puts
-PRICE_OF_OPTION <- c()
+PRICE_IN_MARKET <- c()
 ESTIMATED_PRICE <- c()
 SIMULATED_PRICE <- c()
 STRIKE <- c()
@@ -244,7 +281,7 @@ for (input in 1:nrow(put_option_list)) {
     ESTIMATED_PRICE <- c(ESTIMATED_PRICE, round(estimated_price, 4))
 
     #cat("price of put option on market ", price_option, "\n")
-    PRICE_OF_OPTION <- c(PRICE_OF_OPTION, price_option)
+    PRICE_IN_MARKET <- c(PRICE_IN_MARKET, price_option)
     ##################################################################################
     # monte carlo simulation 
     num.sim <- 100000
@@ -259,6 +296,6 @@ for (input in 1:nrow(put_option_list)) {
 
 cat(" spot price :", spot_price,"\n")
 cat(" expire date", exp_date, "\n")
-put_final <- data.frame(STRIKE,PRICE_OF_OPTION, ESTIMATED_PRICE, SIMULATED_PRICE)
+put_final <- data.frame(STRIKE,PRICE_IN_MARKET, ESTIMATED_PRICE, SIMULATED_PRICE)
 
 View(put_final)
