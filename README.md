@@ -11,3 +11,5 @@ The column name SIMULATED_PRICE is the price estimated form Monte Carlo simulati
 The column name STRIKE is the strike price of the option. 
 
 All the values displayed in table are in US $ 
+
+check the file V1.R 
